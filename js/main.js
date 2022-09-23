@@ -220,6 +220,57 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // difference
+
+  class Difference {
+    constructor(oldOfficer, newOfficer, items) {
+      this.oldOfficer = document.querySelector(oldOfficer);
+      this.newOfficer = document.querySelector(newOfficer);
+      this.oldItems = this.oldOfficer.querySelectorAll(items);
+      this.newItems = this.newOfficer.querySelectorAll(items);
+
+      this.oldCounter = 0;
+      this.newCounter = 0;
+
+      this.oldItems.forEach(item => {
+        item.classList.add('animated', 'fadeIn');
+      });
+
+      this.newItems.forEach(item => {
+        item.classList.add('animated', 'fadeIn');
+      });
+    }
+
+    bindTriggers(container, items, counter) {
+      container.querySelector('.plus').addEventListener('click', () => {
+        if (counter !== items.length - 2) {
+          items[counter].style.display = 'flex';
+          counter++;
+        } else {
+          items[counter].style.display = 'flex';
+          items[items.length - 1].remove();        
+        }
+      });
+    }
+
+    hideItems(items) {
+      items.forEach((item, i, arr) => {
+        if(i !== arr.length - 1) {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    init() {
+      this.hideItems(this.oldItems);
+      this.hideItems(this.newItems);
+      this.bindTriggers(this.oldOfficer, this.oldItems, this.oldCounter);
+      this.bindTriggers(this.newOfficer, this.newItems, this.newCounter);
+    }
+  }
+
+
+
   /////////////////////////////////////////////////////////////////////////////////////
   const slider = new MainSlider({ btns: '.next', container: '.page', slides: '.slide' });
   slider.render();
@@ -253,4 +304,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const player = new VideoPlayer('.showup .play', '.overlay');
   player.init();
+
+  new Difference('.officerold', '.officernew', '.officer__card-item').init();
 });
