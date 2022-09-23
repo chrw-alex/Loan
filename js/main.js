@@ -13,7 +13,9 @@ window.addEventListener('DOMContentLoaded', () => {
       animate,
       autoplay } = {}) {
       this.container = document.querySelector(container);
-      this.slides = this.container.children;
+      try {
+        this.slides = this.container.children;
+      } catch (e) { }
       this.btns = document.querySelectorAll(btns);
       this.prev = document.querySelector(prev);
       this.next = document.querySelector(next);
@@ -30,9 +32,11 @@ window.addEventListener('DOMContentLoaded', () => {
     constructor(btns) {
       super(btns);
 
-      Array.from(this.slides).forEach(slide => {
-        slide.classList.add('animated', 'fadeIn');
-      });
+      try {
+        Array.from(this.slides).forEach(slide => {
+          slide.classList.add('animated', 'fadeIn');
+        });
+      } catch (e) { }
     }
 
     showSlides(n) {
@@ -69,11 +73,7 @@ window.addEventListener('DOMContentLoaded', () => {
       this.showSlides(this.slideIndex += n);
     }
 
-    render() {
-      try {
-        this.hanson = document.querySelector('.hanson');
-      } catch (e) { }
-
+    bindTriggers() {
       this.btns.forEach(item => {
         item.addEventListener('click', () => {
           this.plusSlides(1);
@@ -85,8 +85,33 @@ window.addEventListener('DOMContentLoaded', () => {
           this.showSlides(this.slideIndex);
         });
       });
+  
+      document.querySelectorAll('.prevmodule').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          this.plusSlides(-1);
+        });
+      });
 
-      this.showSlides(this.slideIndex);
+      document.querySelectorAll('.nextmodule').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          this.plusSlides(1);
+        });
+      });
+    }
+
+    render() {
+      if (this.container) {
+        try {
+          this.hanson = document.querySelector('.hanson');
+        } catch (e) { }
+
+        this.showSlides(this.slideIndex);
+        this.bindTriggers();
+      } 
     }
   }
 
@@ -149,19 +174,21 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     init() {
-      this.container.style.cssText = `
-            display: flex;
-            flex-wrap: wrap;
-            overflow: hidden;
-            align-items: flex-start;
-        `;
+      try {
+        this.container.style.cssText = `
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        align-items: flex-start;
+    `;
 
-      this.bindTriggers();
-      this.decorizeSlides();
+        this.bindTriggers();
+        this.decorizeSlides();
 
-      if (this.autoplay) {
-        setInterval(() => this.nextSlide(), 5000);
-      }
+        if (this.autoplay) {
+          setInterval(() => this.nextSlide(), 5000);
+        }
+      } catch (e) { }
     }
   }
 
@@ -226,19 +253,22 @@ window.addEventListener('DOMContentLoaded', () => {
     constructor(oldOfficer, newOfficer, items) {
       this.oldOfficer = document.querySelector(oldOfficer);
       this.newOfficer = document.querySelector(newOfficer);
-      this.oldItems = this.oldOfficer.querySelectorAll(items);
-      this.newItems = this.newOfficer.querySelectorAll(items);
-
+      try {
+        this.oldItems = this.oldOfficer.querySelectorAll(items);
+        this.newItems = this.newOfficer.querySelectorAll(items);
+      } catch (e) { }
       this.oldCounter = 0;
       this.newCounter = 0;
 
-      this.oldItems.forEach(item => {
-        item.classList.add('animated', 'fadeIn');
-      });
+      try {
+        this.oldItems.forEach(item => {
+          item.classList.add('animated', 'fadeIn');
+        });
 
-      this.newItems.forEach(item => {
-        item.classList.add('animated', 'fadeIn');
-      });
+        this.newItems.forEach(item => {
+          item.classList.add('animated', 'fadeIn');
+        });
+      } catch (e) { }
     }
 
     bindTriggers(container, items, counter) {
@@ -262,10 +292,12 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     init() {
-      this.hideItems(this.oldItems);
-      this.hideItems(this.newItems);
-      this.bindTriggers(this.oldOfficer, this.oldItems, this.oldCounter);
-      this.bindTriggers(this.newOfficer, this.newItems, this.newCounter);
+      try {
+        this.hideItems(this.oldItems);
+        this.hideItems(this.newItems);
+        this.bindTriggers(this.oldOfficer, this.oldItems, this.oldCounter);
+        this.bindTriggers(this.newOfficer, this.newItems, this.newCounter);
+      } catch (e) { }
     }
   }
 
@@ -399,8 +431,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   /////////////////////////////////////////////////////////////////////////////////////
-  const slider = new MainSlider({ btns: '.next', container: '.page', slides: '.slide' });
+  const slider = new MainSlider({ btns: '.next', container: '.page'});
   slider.render();
+
+  const modulePageSlider = new MainSlider({container: '.moduleapp', btns: '.next'});
+  modulePageSlider.render();
 
   const showUpSlider = new MiniSlider({
     container: '.showup__content-slider',
