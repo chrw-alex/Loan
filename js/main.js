@@ -469,6 +469,57 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // showInfo
+
+  class showInfo {
+    constructor(triggers) {
+      this.btns = document.querySelectorAll(triggers);
+    }
+
+    init() {
+      this.btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const sibling = btn.closest('.module__info-show').nextElementSibling;
+
+          sibling.classList.add('animated', 'fadeIn');
+          sibling.classList.toggle('msg');
+          sibling.style.marginTop = '20px';
+        });
+      });
+    }
+  }
+
+  // download
+
+  class Download {
+    constructor(triggers) {
+      this.btns = document.querySelectorAll(triggers);
+      this.path = 'assets/img/mainbg.jpg';
+    }
+
+    downloadItem(path) {
+      const element = document.createElement('a');
+
+      element.setAttribute('href', path);
+      element.setAttribute('download', 'picture');
+
+      element.style.display = 'none';
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
+    }
+
+    init() {
+      this.btns.forEach(item => {
+        item.addEventListener('click', (e) => {
+          this.downloadItem(this.path);
+        });
+      });
+    }
+  }
+
 
 
   /////////////////////////////////////////////////////////////////////////////////////
@@ -510,5 +561,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
   new Difference('.officerold', '.officernew', '.officer__card-item').init();
 
-  new Form('.form').init()
+  new Form('.form').init();
+
+  new showInfo('.plus__content').init();
+
+  new Download('.download').init();
 });
